@@ -1,3 +1,18 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import TelegramUser
+
+
+class TelegramUserAdmin(admin.ModelAdmin):
+    list_display = (
+        "username",
+        "first_name",
+        "last_name",
+        "is_active",
+        "is_blocked",
+    )
+
+    readonly_fields = ("created_at", "updated_at")
+
+
+admin.site.register(TelegramUser, TelegramUserAdmin)

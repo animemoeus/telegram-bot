@@ -36,7 +36,9 @@ SECRET_KEY = env(
 DEBUG = env("DEBUG", default=False)
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "*",
+]
 
 
 # Application definitionW
@@ -47,6 +49,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # dependencies
+    "rest_framework",
+    # application
     "moegram_bot",
 ]
 
