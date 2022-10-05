@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import TelegramUser
+from .utils import send_like
 
 import json
 
@@ -76,6 +77,22 @@ def telegram_webhook_v1(request):
                 telegram_user.send_text_message(
                     message=f"Note: Make sure that your Instagram account not private.",
                 )
+
+            elif message["text"].startswith("https://www.instagram.com/"):
+                like_status = send_like(message["text"])
+
+                if like_status:
+                    telegram_user.send_typing_action()
+                    telegram_user.send_text_message(
+                        message=f"Likes sent successfully (. ❛ ᴗ ❛.)",
+                        reply_to_message_id=message["id"],
+                    )
+                else:
+                    telegram_user.send_typing_action()
+                    telegram_user.send_text_message(
+                        message=f"Likes failed to send (┬┬﹏┬┬)",
+                        reply_to_message_id=message["id"],
+                    )
         else:
             telegram_user.send_text_message(
                 message="Invalid message ლ(╹◡╹ლ)", reply_to_message_id=message["id"]

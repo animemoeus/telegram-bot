@@ -143,3 +143,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # .env variable
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN", default=None)
+
+# Instagram Like API
+LIKE_API_URL = env("LIKE_API_URL", default=None)
+LIKE_API_KEY = env("LIKE_API_KEY", default=None)
+LIKE_API_SECRET = env("LIKE_API_SECRET", default=None)
