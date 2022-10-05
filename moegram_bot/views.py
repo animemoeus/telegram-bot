@@ -19,6 +19,8 @@ def telegram_webhook_v1(request):
         except:
             return HttpResponse("ლ(╹◡╹ლ)")
 
+        print(data)
+
         # get Telegram user information
         user = {
             "user_id": data["message"]["from"]["id"],
@@ -32,6 +34,7 @@ def telegram_webhook_v1(request):
         }
         message = {
             "type": "text" if data["message"].__contains__("text") else "unknown",
+            "id": data["message"]["message_id"],
         }
 
         # create or update TelegramUser
@@ -44,7 +47,15 @@ def telegram_webhook_v1(request):
         # hanlde blocked TelegramUser
         if telegram_user.is_blocked:
             telegram_user.send_text_message(
-                message="Your account is already blocked (〜￣▽￣)〜"
+                message="Your account is already blocked (〜￣▽￣)〜",
+                reply_to_message_id=message["id"],
+            )
+
+        if message["type"] == "text":
+            pass
+        else:
+            telegram_user.send_text_message(
+                message="Invalid message ლ(╹◡╹ლ)", reply_to_message_id=message["id"]
             )
 
         return HttpResponse("arter tendean")

@@ -22,5 +22,9 @@ class TelegramUser(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
-    def send_text_message(self, message=None):
-        send_text_message(user_id=self.user_id, message=message)
+    def send_text_message(self, message=None, reply_to_message_id=None):
+        send_text_message(
+            user_id=self.user_id,
+            message=message,
+            reply_to_message_id=reply_to_message_id,
+        )
