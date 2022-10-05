@@ -1,8 +1,10 @@
+from django.conf import settings
+
 import requests
 
 
 def send_text_message(user_id=None, reply_to_message_id=None, message=None):
-    url = "https://api.telegram.org/bot1421107253:AAEKZzGV5izwIINbURy5r-eH-Vk2e_eoOeY/sendMessage"
+    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
 
     payload = {
         "chat_id": user_id,
