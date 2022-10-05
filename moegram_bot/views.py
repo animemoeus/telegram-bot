@@ -113,7 +113,6 @@ def telegram_webhook_v1(request):
                             message=f"Try again later 😁👍",
                         )
                 else:  # wait n of time before sending like again
-
                     # calculate waiting time
                     # idk how can i calculate the time, but it works 🤣
                     wait_time = (

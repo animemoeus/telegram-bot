@@ -7,12 +7,20 @@ from .telegram import send_typing_action, send_text_message
 
 class TelegramUser(models.Model):
     class Interval(models.IntegerChoices):
-        FIVE_MINUTE = 5
-        TEN_MINUTE = 10
-        FIFTEEN_MINUTE = 15
-        TWENTY_MINUTE = 20
-        THIRTY_MINUTE = 30
-        ONE_HOUR = 60
+        ZERO = 0
+        ONE_MINUTE = 1
+        FIVE_MINUTES = 5
+        TEN_MINUTES = 10
+        FIFTEEN_MINUTES = 15
+        TWENTY_MINUTES = 20
+        TWENTY_FIVE_MINUTES = 25
+        THIRTY_MINUTES = 30
+        THIRTY_FIVE_MINUTES = 35
+        FORTY_MINUTES = 40
+        FORTY_FIVE_MINUTES = 45
+        FIFTY_MINUTES = 50
+        FIFTY_FIVE_MINUTES = 55
+        SIXTY_MINUTES = 60
 
     user_id = models.CharField(max_length=25)
 
@@ -28,7 +36,7 @@ class TelegramUser(models.Model):
     is_active = models.BooleanField(default=True)
     is_blocked = models.BooleanField(default=False)
 
-    send_like_interval = models.IntegerField(choices=Interval.choices, default=30)
+    send_like_interval = models.IntegerField(choices=Interval.choices, default=60)
     last_send_like_date = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
