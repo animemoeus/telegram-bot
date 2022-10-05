@@ -1,0 +1,7 @@
+# files
+*.pyc
+.env
+db.sqlite3
+
+# folders
+env
