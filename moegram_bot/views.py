@@ -19,8 +19,6 @@ def telegram_webhook_v1(request):
         except:
             return HttpResponse("ლ(╹◡╹ლ)")
 
-        print(data)
-
         # get Telegram user information
         user = {
             "user_id": data["message"]["from"]["id"],
@@ -37,6 +35,9 @@ def telegram_webhook_v1(request):
             "id": data["message"]["message_id"],
         }
 
+        if message["type"] == "text":
+            message["text"] = data["message"]["text"]
+
         # create or update TelegramUser
         telegram_user, created = TelegramUser.objects.update_or_create(
             user_id=user["user_id"], defaults=(user)
@@ -52,7 +53,17 @@ def telegram_webhook_v1(request):
             )
 
         if message["type"] == "text":
-            pass
+            if message["text"] == "/start":
+                telegram_user.send_typing_action()
+
+                telegram_user.send_text_message(
+                    message=f"Hello {telegram_user.first_name} 😁\n\nWelcome to Moegram Bot!",
+                    reply_to_message_id=message["id"],
+                )
+
+                telegram_user.send_text_message(
+                    message=f"Type /help to start using Moegram Bot!",
+                )
         else:
             telegram_user.send_text_message(
                 message="Invalid message ლ(╹◡╹ლ)", reply_to_message_id=message["id"]

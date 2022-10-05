@@ -1,7 +1,7 @@
 from email.policy import default
 from django.db import models
 
-from .telegram import send_text_message
+from .telegram import send_typing_action, send_text_message
 
 
 class TelegramUser(models.Model):
@@ -21,6 +21,9 @@ class TelegramUser(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def send_typing_action(self):
+        send_typing_action(self.user_id)
 
     def send_text_message(self, message=None, reply_to_message_id=None):
         send_text_message(
