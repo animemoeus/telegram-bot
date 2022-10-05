@@ -1,6 +1,8 @@
 from email.policy import default
 from django.db import models
 
+from .telegram import send_text_message
+
 
 class TelegramUser(models.Model):
     user_id = models.CharField(max_length=25)
@@ -19,3 +21,6 @@ class TelegramUser(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def send_text_message(self, message=None):
+        send_text_message(user_id=self.user_id, message=message)

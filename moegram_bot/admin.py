@@ -5,6 +5,7 @@ from .models import TelegramUser
 
 class TelegramUserAdmin(admin.ModelAdmin):
     list_display = (
+        "user_id",
         "username",
         "first_name",
         "last_name",
