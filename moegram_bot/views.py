@@ -1,10 +1,12 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
 from .models import TelegramUser
 from .utils import send_like
 
 import json
+from datetime import timedelta
 
 
 def index(request):
@@ -79,18 +81,50 @@ def telegram_webhook_v1(request):
                 )
 
             elif message["text"].startswith("https://www.instagram.com/"):
-                like_status = send_like(message["text"])
+                # if telegram user last send like time is None
+                # or telegram user (last send like datetime + send like interval) less than current datetime
+                # allow telegram user to send like
+                if (
+                    telegram_user.last_send_like_date is None
+                    or telegram_user.last_send_like_date
+                    + timedelta(minutes=telegram_user.send_like_interval)
+                    < timezone.now()
+                ):
+                    # send like to Instagram post
+                    like_status = send_like(message["text"])
 
-                if like_status:
-                    telegram_user.send_typing_action()
+                    if like_status == True:
+                        telegram_user.send_typing_action()
+                        telegram_user.send_text_message(
+                            message=f"Likes sent successfully (. ❛ ᴗ ❛.)",
+                            reply_to_message_id=message["id"],
+                        )
+
+                        # don't forget to update telegram user last send like date if like successfully sent
+                        telegram_user.last_send_like_date = timezone.now()
+                        telegram_user.save()
+                    else:
+                        telegram_user.send_typing_action()
+                        telegram_user.send_text_message(
+                            message=f"Likes failed to send (┬┬﹏┬┬)",
+                            reply_to_message_id=message["id"],
+                        )
+                        telegram_user.send_text_message(
+                            message=f"Try again later 😁👍",
+                        )
+                else:  # wait n of time before sending like again
+
+                    # calculate waiting time
+                    # idk how can i calculate the time, but it works 🤣
+                    wait_time = (
+                        telegram_user.last_send_like_date
+                        + timedelta(minutes=telegram_user.send_like_interval)
+                    ) - timezone.now()
+                    wait_time = timedelta(seconds=wait_time.seconds)
+                    wait_time = str(wait_time).split(":")
+
                     telegram_user.send_text_message(
-                        message=f"Likes sent successfully (. ❛ ᴗ ❛.)",
-                        reply_to_message_id=message["id"],
-                    )
-                else:
-                    telegram_user.send_typing_action()
-                    telegram_user.send_text_message(
-                        message=f"Likes failed to send (┬┬﹏┬┬)",
+                        message=f"Wait {int(wait_time[1])} {'minutes' if int(wait_time[1]) > 1 else 'minute'} {int(wait_time[2])} {'seconds' if int(wait_time[2])> 1 else 'second'} before sending like again :)",
                         reply_to_message_id=message["id"],
                     )
         else:
