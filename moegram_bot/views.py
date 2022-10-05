@@ -64,6 +64,18 @@ def telegram_webhook_v1(request):
                 telegram_user.send_text_message(
                     message=f"Type /help to start using Moegram Bot!",
                 )
+
+            elif message["text"] == "/help":
+                telegram_user.send_typing_action()
+
+                telegram_user.send_text_message(
+                    message=f"Send your Instagram post URL here to increse your post like 💗",
+                    reply_to_message_id=message["id"],
+                )
+
+                telegram_user.send_text_message(
+                    message=f"Note: Make sure that your Instagram account not private.",
+                )
         else:
             telegram_user.send_text_message(
                 message="Invalid message ლ(╹◡╹ლ)", reply_to_message_id=message["id"]
