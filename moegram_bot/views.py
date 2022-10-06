@@ -4,6 +4,7 @@ from datetime import timedelta
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from tabulate import tabulate
 
 from .models import TelegramUser
 from .utils import send_like
@@ -14,7 +15,7 @@ def index(request):
 
 
 @csrf_exempt
-def telegram_webhook_v1(request):
+def telegram_webhook(request):
 
     if request.method == "POST":
         try:
@@ -33,6 +34,8 @@ def telegram_webhook_v1(request):
             if data["message"]["from"].__contains__("username")
             else "",
         }
+
+        # get message from Telegram user
         message = {
             "type": "text" if data["message"].__contains__("text") else "unknown",
             "id": data["message"]["message_id"],
@@ -50,10 +53,21 @@ def telegram_webhook_v1(request):
 
         # hanlde blocked TelegramUser
         if telegram_user.is_blocked:
+            telegram_user.send_typing_action()
             telegram_user.send_text_message(
                 message="Your account is already blocked (〜￣▽￣)〜",
                 reply_to_message_id=message["id"],
             )
+            return HttpResponse(".")
+
+        # handle inactive TelegramUser
+        if not telegram_user.is_active:
+            telegram_user.send_typing_action()
+            telegram_user.send_text_message(
+                message=f"Contact @artertendean to activate your account 😁👍",
+                reply_to_message_id=message["id"],
+            )
+            return HttpResponse(".")
 
         if message["type"] == "text":
             if message["text"] == "/start":
@@ -80,7 +94,20 @@ def telegram_webhook_v1(request):
                     message=f"Note: Make sure that your Instagram account not private.",
                 )
 
-            elif message["text"].startswith("https://www.instagram.com/"):
+            elif message["text"] == "/me":
+                table = [
+                    ["Name", telegram_user.first_name],
+                    ["ID", telegram_user.user_id],
+                ]
+                msg = tabulate(table, tablefmt="plain")
+
+                telegram_user.send_typing_action()
+                telegram_user.send_text_message(
+                    message=f"<pre>{msg}</pre>",
+                    reply_to_message_id=message["id"],
+                )
+
+            elif message["text"].startswith("https://www.instagram.com/p/"):
                 # if telegram user last send like time is None
                 # or telegram user (last send like datetime + send like interval) less than current datetime
                 # allow telegram user to send like
@@ -127,6 +154,7 @@ def telegram_webhook_v1(request):
                         reply_to_message_id=message["id"],
                     )
         else:
+            telegram_user.send_typing_action()
             telegram_user.send_text_message(
                 message="Invalid message ლ(╹◡╹ლ)", reply_to_message_id=message["id"]
             )

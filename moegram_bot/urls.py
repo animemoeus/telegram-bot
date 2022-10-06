@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     path("", views.index),
-    path("telegram-webhook/v1/", views.telegram_webhook_v1),
+    path("telegram-webhook/", views.telegram_webhook),
 ]
