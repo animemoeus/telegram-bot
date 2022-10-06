@@ -2,7 +2,8 @@ name: Sylveon DomaiNesia
 
 on:
   release:
-    branches: [master]
+    types:
+      - published
 
 jobs:
   build:
