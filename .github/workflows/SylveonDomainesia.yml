@@ -1,0 +1,28 @@
+name: Sylveon DomaiNesia
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing Remote SSH Commands Using Password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SYLVEON_DOMAINESIA_HOST }}
+          username: ${{ secrets.SYLVEON_DOMAINESIA_USERNAME }}
+          password: ${{ secrets.SYLVEON_DOMAINESIA_PASSWORD }}
+          port: ${{ secrets.SYLVEON_DOMAINESIA_PORT }}
+          script_stop: true
+          script: |
+            cd /home/animemoe/repositories/moegram-bot
+            git pull origin master --force
+            /home/animemoe/virtualenv/repositories/moegram-bot/3.8/bin/pip install --upgrade pip
+            /home/animemoe/virtualenv/repositories/moegram-bot/3.8/bin/pip install -r requirements.txt
+            /home/animemoe/virtualenv/repositories/moegram-bot/3.8/bin/python manage.py migrate
+            /home/animemoe/virtualenv/repositories/moegram-bot/3.8/bin/python manage.py check
+            /home/animemoe/virtualenv/repositories/moegram-bot/3.8/bin/python manage.py collectstatic --noinput
+            touch tmp/restart.txt
