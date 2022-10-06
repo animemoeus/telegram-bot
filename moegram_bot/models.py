@@ -1,6 +1,3 @@
-from email.policy import default
-from random import choices
-
 from django.db import models
 
 from .telegram import send_text_message, send_typing_action
@@ -8,7 +5,7 @@ from .telegram import send_text_message, send_typing_action
 
 class TelegramUser(models.Model):
     class Interval(models.IntegerChoices):
-        ZERO = 0
+        UNLIMITED = 0
         ONE_MINUTE = 1
         FIVE_MINUTES = 5
         TEN_MINUTES = 10
@@ -34,7 +31,7 @@ class TelegramUser(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_blocked = models.BooleanField(default=False)
 
     send_like_interval = models.IntegerField(choices=Interval.choices, default=60)
