@@ -13,6 +13,8 @@ class TelegramUserAdmin(admin.ModelAdmin):
         "is_blocked",
     )
 
+    search_fields = ["user_id", "first_name", "last_name", "username"]
+
     readonly_fields = ("created_at", "updated_at")
 
 
