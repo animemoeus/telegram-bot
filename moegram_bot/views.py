@@ -21,6 +21,9 @@ def telegram_webhook(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
+
+            if data.__contains__("edited_message"):
+                return HttpResponse(".")
         except:
             return HttpResponse("ლ(╹◡╹ლ)")
 
