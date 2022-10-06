@@ -1,4 +1,5 @@
 import json
+import random
 from datetime import timedelta
 
 from django.http import HttpResponse
@@ -149,10 +150,17 @@ def telegram_webhook(request):
                     wait_time = timedelta(seconds=wait_time.seconds)
                     wait_time = str(wait_time).split(":")
 
+                    telegram_user.send_typing_action()
                     telegram_user.send_text_message(
                         message=f"Wait {int(wait_time[1])} {'minutes' if int(wait_time[1]) > 1 else 'minute'} {int(wait_time[2])} {'seconds' if int(wait_time[2])> 1 else 'second'} before sending like again :)",
                         reply_to_message_id=message["id"],
                     )
+            else:
+                telegram_user.send_typing_action()
+                telegram_user.send_text_message(
+                    message=f"{random.choice(['(. ❛ ᴗ ❛.)','(〜￣▽￣)〜','(￣o￣) . z Z'])}",
+                    reply_to_message_id=message["id"],
+                )
         else:
             telegram_user.send_typing_action()
             telegram_user.send_text_message(
