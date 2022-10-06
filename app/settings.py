@@ -36,7 +36,7 @@ SECRET_KEY = env(
 DEBUG = env("DEBUG", default=False)
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["moegram-bot.animemoe.us"]
 if DEBUG:
     ALLOWED_HOSTS.append("*")
 
@@ -90,12 +90,24 @@ WSGI_APPLICATION = "app.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": env("DATABASE_NAME"),
+            "USER": env("DATABASE_USER"),
+            "PASSWORD": env("DATABASE_PASSWORD"),
+            "HOST": env("DATABASE_HOST"),
+            "OPTIONS": {"charset": "utf8mb4"},
+        },
+    }
 
 
 # Password validation
@@ -135,6 +147,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = "/home/animemoe/subdomains/moegram-bot.animemoe.us/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
