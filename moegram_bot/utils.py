@@ -1,6 +1,5 @@
-from django.conf import settings
-
 import requests
+from django.conf import settings
 
 
 def send_like(post_url):

@@ -1,8 +1,9 @@
 from email.policy import default
 from random import choices
+
 from django.db import models
 
-from .telegram import send_typing_action, send_text_message
+from .telegram import send_text_message, send_typing_action
 
 
 class TelegramUser(models.Model):

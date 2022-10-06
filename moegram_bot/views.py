@@ -1,12 +1,12 @@
+import json
+from datetime import timedelta
+
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import TelegramUser
 from .utils import send_like
-
-import json
-from datetime import timedelta
 
 
 def index(request):
