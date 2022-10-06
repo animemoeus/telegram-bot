@@ -36,7 +36,7 @@ SECRET_KEY = env(
 DEBUG = env("DEBUG", default=True)
 
 
-ALLOWED_HOSTS = ["moegram-bot.animemoe.us"]
+ALLOWED_HOSTS = ["telegram-bot.animemoe.us"]
 if DEBUG:
     ALLOWED_HOSTS.append("*")
 
