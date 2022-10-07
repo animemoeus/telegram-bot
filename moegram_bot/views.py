@@ -2,6 +2,7 @@ import json
 import random
 from datetime import timedelta
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -110,6 +111,15 @@ def telegram_webhook(request):
                     message=f"<pre>{msg}</pre>",
                     reply_to_message_id=message["id"],
                 )
+
+            elif message["text"] == settings.MASTER_KEY_ACTIVATION:
+                telegram_user.send_typing_action()
+                telegram_user.send_text_message(
+                    message=f"Hello {telegram_user.first_name}, your account is activated(. ❛ ᴗ ❛.)",
+                    reply_to_message_id=message["id"],
+                )
+                telegram_user.is_active=True
+                telegram_user.save()
 
             elif message["text"].startswith("https://www.instagram.com/p/"):
                 # if telegram user last send like time is None
