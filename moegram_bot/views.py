@@ -65,7 +65,7 @@ def telegram_webhook(request):
             )
             return HttpResponse(".")
 
-        # activate TelegramUser without admin page
+        # message to activate TelegramUser without admin page
         try:
             if message["text"] == settings.MASTER_KEY_ACTIVATION:
                 telegram_user.send_typing_action()
