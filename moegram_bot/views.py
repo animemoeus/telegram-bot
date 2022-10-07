@@ -74,6 +74,19 @@ def telegram_webhook(request):
             )
             return HttpResponse(".")
 
+        # activate TelegramUser without admin page
+        try:
+            if message["text"] == settings.MASTER_KEY_ACTIVATION:
+                telegram_user.send_typing_action()
+                telegram_user.send_text_message(
+                    message=f"Hello {telegram_user.first_name}, your account is activated(. ❛ ᴗ ❛.)",
+                    reply_to_message_id=message["id"],
+                )
+                telegram_user.is_active = True
+                telegram_user.save()
+        except:
+            pass
+
         if message["type"] == "text":
             if message["text"] == "/start":
                 telegram_user.send_typing_action()
@@ -111,15 +124,6 @@ def telegram_webhook(request):
                     message=f"<pre>{msg}</pre>",
                     reply_to_message_id=message["id"],
                 )
-
-            elif message["text"] == settings.MASTER_KEY_ACTIVATION:
-                telegram_user.send_typing_action()
-                telegram_user.send_text_message(
-                    message=f"Hello {telegram_user.first_name}, your account is activated(. ❛ ᴗ ❛.)",
-                    reply_to_message_id=message["id"],
-                )
-                telegram_user.is_active=True
-                telegram_user.save()
 
             elif message["text"].startswith("https://www.instagram.com/p/"):
                 # if telegram user last send like time is None
