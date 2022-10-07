@@ -65,15 +65,6 @@ def telegram_webhook(request):
             )
             return HttpResponse(".")
 
-        # handle inactive TelegramUser
-        if not telegram_user.is_active:
-            telegram_user.send_typing_action()
-            telegram_user.send_text_message(
-                message=f"Contact @artertendean to activate your account 😁👍",
-                reply_to_message_id=message["id"],
-            )
-            return HttpResponse(".")
-
         # activate TelegramUser without admin page
         try:
             if message["text"] == settings.MASTER_KEY_ACTIVATION:
@@ -86,6 +77,15 @@ def telegram_webhook(request):
                 telegram_user.save()
         except:
             pass
+
+        # handle inactive TelegramUser
+        if not telegram_user.is_active:
+            telegram_user.send_typing_action()
+            telegram_user.send_text_message(
+                message=f"Contact @artertendean to activate your account 😁👍",
+                reply_to_message_id=message["id"],
+            )
+            return HttpResponse(".")
 
         if message["type"] == "text":
             if message["text"] == "/start":
