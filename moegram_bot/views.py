@@ -100,6 +100,13 @@ def telegram_webhook(request):
                     message=f"Type /help to start using Moegram Bot!",
                 )
 
+            elif message["text"] == "arter":
+                telegram_user.send_typing_action()
+
+                telegram_user.send_text_message(
+                    message=f"Dondon...",
+                )
+
             elif message["text"] == "/help":
                 telegram_user.send_typing_action()
 
