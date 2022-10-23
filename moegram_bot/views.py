@@ -23,6 +23,13 @@ def telegram_webhook(request):
         try:
             data = json.loads(request.body)
 
+            # reject all incoming webhook without secret token
+            if (
+                request.headers.get("X-Telegram-Bot-Api-Secret-Token", None)
+                != settings.MASTER_KEY_ACTIVATION
+            ):
+                return HttpResponse(".")
+
             if data.__contains__("edited_message"):
                 return HttpResponse(".")
         except:
