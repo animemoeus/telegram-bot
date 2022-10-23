@@ -31,7 +31,7 @@ class TelegramUser(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_blocked = models.BooleanField(default=False)
 
     send_like_interval = models.IntegerField(choices=Interval.choices, default=60)
