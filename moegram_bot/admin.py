@@ -11,6 +11,7 @@ class TelegramUserAdmin(admin.ModelAdmin):
         "last_name",
         "is_active",
         "is_blocked",
+        'request_count'
     )
 
     search_fields = ["user_id", "first_name", "last_name", "username"]
