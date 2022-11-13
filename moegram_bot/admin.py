@@ -4,20 +4,24 @@ from .models import TelegramUser
 
 
 class TelegramUserAdmin(admin.ModelAdmin):
-    pass
-    # list_display = (
-    #     "user_id",
-    #     "username",
-    #     "first_name",
-    #     "last_name",
-    #     "is_active",
-    #     "is_blocked",
-    #     'request_count'
-    # )
+    list_display = (
+        "user",
+        "username",
+        "is_blocked",
+        "request_count",
+        "updated_at",
+    )
 
-    # search_fields = ["user_id", "first_name", "last_name", "username"]
+    search_fields = ["user__username"]
 
-    # readonly_fields = ("created_at", "updated_at")
+    readonly_fields = (
+        "user",
+        "username",
+        "request_count",
+        "last_send_like_date",
+        "created_at",
+        "updated_at",
+    )
 
 
 admin.site.register(TelegramUser, TelegramUserAdmin)
