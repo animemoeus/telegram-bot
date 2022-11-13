@@ -6,8 +6,19 @@
 
 ---
 
+## Admin Panel
+
+- [Telegram Bot Admin](https://telegram-bot.animemoe.us/admin)
+
+```plaintext
+username: guest
+password: animemoeus
+```
+
+---
+
 ## Bot List
 
-- [Moegram Bot](https://t.me/moegram_bot)
+- [Moegram Bot](https://t.me/moegram_bot) - Increase likes on Instagram post
 
 ---
