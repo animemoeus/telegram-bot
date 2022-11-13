@@ -3,9 +3,11 @@ import random
 from datetime import timedelta
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 from tabulate import tabulate
 
 from .models import TelegramUser
@@ -17,6 +19,7 @@ def index(request):
 
 
 @csrf_exempt
+@api_view(["POST"])
 def telegram_webhook(request):
 
     if request.method == "POST":
@@ -47,6 +50,24 @@ def telegram_webhook(request):
             else "",
         }
 
+        # get or create django_user
+        try:
+            django_user = User.objects.get(username=user["user_id"])
+        except:
+            django_user = User.objects.create_user(username=user["user_id"])
+
+        # create or update telegram_user
+        telegram_user, _ = TelegramUser.objects.update_or_create(
+            user=django_user,
+            defaults=({"user": django_user, "username": user["username"]}),
+        )
+
+        telegram_user.user.first_name = user["first_name"]
+        telegram_user.user.last_name = user["last_name"]
+        telegram_user.request_count += 1
+        telegram_user.user.save()
+        telegram_user.save()
+
         # get message from Telegram user
         message = {
             "type": "text" if data["message"].__contains__("text") else "unknown",
@@ -56,41 +77,11 @@ def telegram_webhook(request):
         if message["type"] == "text":
             message["text"] = data["message"]["text"]
 
-        # create or update TelegramUser
-        telegram_user, created = TelegramUser.objects.update_or_create(
-            user_id=user["user_id"], defaults=(user)
-        )
-        telegram_user.request_count += 1
-        telegram_user.save()
-
         # hanlde blocked TelegramUser
         if telegram_user.is_blocked:
             telegram_user.send_typing_action()
             telegram_user.send_text_message(
                 message="Your account is already blocked (〜￣▽￣)〜",
-                reply_to_message_id=message["id"],
-            )
-            return HttpResponse(".")
-
-        # message to activate TelegramUser without admin page
-        try:
-            if message["text"] == settings.MASTER_KEY_ACTIVATION:
-                telegram_user.send_typing_action()
-                telegram_user.send_text_message(
-                    message=f"Hello {telegram_user.first_name}, your account is activated(. ❛ ᴗ ❛.)",
-                    reply_to_message_id=message["id"],
-                )
-                telegram_user.is_active = True
-                telegram_user.save()
-        except:
-            pass
-
-        # handle inactive TelegramUser
-        if not telegram_user.is_active:
-            telegram_user.send_typing_action()
-            telegram_user.send_text_message(
-                message=f"Contact @artertendean to activate your account 😁👍",
-                reply_to_message_id=message["id"],
             )
             return HttpResponse(".")
 
@@ -99,7 +90,7 @@ def telegram_webhook(request):
                 telegram_user.send_typing_action()
 
                 telegram_user.send_text_message(
-                    message=f"Hello {telegram_user.first_name} 😁\n\nWelcome to Moegram Bot!",
+                    message=f"Hello {telegram_user.user.first_name} 😁\n\nWelcome to Moegram Bot!",
                     reply_to_message_id=message["id"],
                 )
 
@@ -107,48 +98,38 @@ def telegram_webhook(request):
                     message=f"Type /help to start using Moegram Bot!",
                 )
 
-            elif message["text"] == "arter":
-                telegram_user.send_typing_action()
-
-                telegram_user.send_text_message(
-                    message=f"Dondon...",
-                )
-
             elif message["text"] == "/help":
                 telegram_user.send_typing_action()
 
                 telegram_user.send_text_message(
-                    message=f"Send your Instagram post URL here to increse your post like 💗",
+                    message=f"Send your Instagram post URL here to increase your post like ❤️‍🔥",
                     reply_to_message_id=message["id"],
                 )
 
                 telegram_user.send_text_message(
-                    message=f"Note: Make sure that your Instagram account not private.",
+                    message=f"Note: Make sure that your Instagram account is not private.",
                 )
 
             elif message["text"] == "/me":
+                telegram_user.send_typing_action()
+
                 table = [
-                    ["Name", telegram_user.first_name],
-                    ["ID", telegram_user.user_id],
+                    [
+                        "Name",
+                        ":",
+                        f"{telegram_user.user.first_name} {telegram_user.user.last_name}",
+                    ],
+                    ["ID", ":", telegram_user.user.username],
                 ]
                 msg = tabulate(table, tablefmt="plain")
 
-                telegram_user.send_typing_action()
                 telegram_user.send_text_message(
                     message=f"<pre>{msg}</pre>",
                     reply_to_message_id=message["id"],
                 )
 
             elif message["text"].startswith("https://www.instagram.com/p/"):
-                # if telegram user last send like time is None
-                # or telegram user (last send like datetime + send like interval) less than current datetime
-                # allow telegram user to send like
-                if (
-                    telegram_user.last_send_like_date is None
-                    or telegram_user.last_send_like_date
-                    + timedelta(minutes=telegram_user.send_like_interval)
-                    < timezone.now()
-                ):
+                if telegram_user.can_send_like:
                     # send like to Instagram post
                     like_status = send_like(message["text"])
 
@@ -171,19 +152,11 @@ def telegram_webhook(request):
                         telegram_user.send_text_message(
                             message=f"Try again later 😁👍",
                         )
-                else:  # wait n of time before sending like again
-                    # calculate waiting time
-                    # idk how can i calculate the time, but it works 🤣
-                    wait_time = (
-                        telegram_user.last_send_like_date
-                        + timedelta(minutes=telegram_user.send_like_interval)
-                    ) - timezone.now()
-                    wait_time = timedelta(seconds=wait_time.seconds)
-                    wait_time = str(wait_time).split(":")
+                else:
 
                     telegram_user.send_typing_action()
                     telegram_user.send_text_message(
-                        message=f"Wait {int(wait_time[1])} {'minutes' if int(wait_time[1]) > 1 else 'minute'} {int(wait_time[2])} {'seconds' if int(wait_time[2])> 1 else 'second'} before sending like again :)",
+                        message=telegram_user.get_waiting_time,
                         reply_to_message_id=message["id"],
                     )
             else:
