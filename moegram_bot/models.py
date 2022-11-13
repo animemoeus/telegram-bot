@@ -70,3 +70,15 @@ class TelegramUser(models.Model):
         waiting_time = str(waiting_time).split(":")
 
         return f"Please wait {int(waiting_time[1])} {'minutes' if int(waiting_time[1]) > 1 else 'minute'} and {int(waiting_time[2])} {'seconds' if int(waiting_time[2])> 1 else 'second'}  :)"
+
+
+class InstagramPost(models.Model):
+
+    user = models.ForeignKey("TelegramUser", on_delete=models.CASCADE)
+
+    url = models.CharField(max_length=255)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.url

@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from tabulate import tabulate
 
-from .models import TelegramUser
+from .models import InstagramPost, TelegramUser
 from .utils import send_like
 
 
@@ -134,6 +134,8 @@ def telegram_webhook(request):
                     like_status = send_like(message["text"])
 
                     if like_status == True:
+                        InstagramPost(user=telegram_user, url=message["text"]).save()
+
                         telegram_user.send_typing_action()
                         telegram_user.send_text_message(
                             message=f"Likes sent successfully (. ❛ ᴗ ❛.)",

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TelegramUser
+from .models import InstagramPost, TelegramUser
 
 
 class TelegramUserAdmin(admin.ModelAdmin):
@@ -24,4 +24,20 @@ class TelegramUserAdmin(admin.ModelAdmin):
     )
 
 
+class InstagramPostAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "user",
+        "url",
+        "created_at",
+    )
+
+    readonly_fields = (
+        "user",
+        "url",
+        "created_at",
+    )
+
+
 admin.site.register(TelegramUser, TelegramUserAdmin)
+admin.site.register(InstagramPost, InstagramPostAdmin)
