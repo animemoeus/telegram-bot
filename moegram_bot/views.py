@@ -128,7 +128,9 @@ def telegram_webhook(request):
                     reply_to_message_id=message["id"],
                 )
 
-            elif message["text"].startswith("https://www.instagram.com/p/"):
+            elif message["text"].startswith("https://www.instagram.com/p/") or message[
+                "text"
+            ].startswith("https://www.instagram.com/reel/"):
                 if telegram_user.can_send_like:
                     # send like to Instagram post
                     like_status = send_like(message["text"])
