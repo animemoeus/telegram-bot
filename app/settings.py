@@ -10,17 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os
 from pathlib import Path
 
 import environ
 
 env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+# environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -148,7 +148,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = "/home/animemoe/subdomain/telegram-bot.animemoe.us/static/"
+STATIC_ROOT = "/home/unklabid/domains/telegram-bot.animemoe.us/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -157,14 +157,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # .env variable
 if DEBUG:
-    MOEGRAM_BOT_TOKEN = env("MOEGRAM_BOT_TOKEN_DEBUG", default=None)
+    MOEGRAM_BOT_TOKEN = env("MOEGRAM_BOT_TOKEN_DEBUG", default="")
 else:
-    MOEGRAM_BOT_TOKEN = env("MOEGRAM_BOT_TOKEN", default=None)
+    MOEGRAM_BOT_TOKEN = env("MOEGRAM_BOT_TOKEN", default="")
 
 # Instagram Like API
-LIKE_API_URL = env("LIKE_API_URL", default=None)
-LIKE_API_KEY = env("LIKE_API_KEY", default=None)
-LIKE_API_SECRET = env("LIKE_API_SECRET", default=None)
+LIKE_API_URL = env("LIKE_API_URL", default="")
+LIKE_API_KEY = env("LIKE_API_KEY", default="")
+LIKE_API_SECRET = env("LIKE_API_SECRET", default="")
 
 # SECRET KEY TO BYPASS MOEGRAM BOT USER ACTIVATION
 MASTER_KEY_ACTIVATION = env("MASTER_KEY", default=None)

@@ -25,6 +25,7 @@ def telegram_webhook(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
+            print(request.headers.get("X-Telegram-Bot-Api-Secret-Token", None))
 
             # reject all incoming webhook without secret token
             if (
