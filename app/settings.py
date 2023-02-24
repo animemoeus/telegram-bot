@@ -101,10 +101,10 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": env("DATABASE_NAME", default=None),
-            "USER": env("DATABASE_USER", default=None),
-            "PASSWORD": env("DATABASE_PASSWORD", default=None),
-            "HOST": env("DATABASE_HOST", default=None),
+            "NAME": env("DATABASE_NAME", default=""),
+            "USER": env("DATABASE_USER", default=""),
+            "PASSWORD": env("DATABASE_PASSWORD", default=""),
+            "HOST": env("DATABASE_HOST", default=""),
             "OPTIONS": {"charset": "utf8mb4"},
         },
     }
