@@ -1,0 +1,30 @@
+name: Alessandria DomaiNesia
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing Remote SSH Commands Using Password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ALESSANDRIA_DOMAINESIA_HOST }}
+          username: ${{ secrets.ALESSANDRIA_DOMAINESIA_USERNAME }}
+          password: ${{ secrets.ALESSANDRIA_DOMAINESIA_PASSWORD }}
+          port: ${{ secrets.ALESSANDRIA_DOMAINESIA_PORT }}
+          script_stop: true
+          script: |
+            cd /home/unklabid/repositories/telegram-bot
+            git pull origin ${{ github.event.release.target_commitish }} --force
+            git checkout ${{ github.event.release.target_commitish }}
+            /home/unklabid/virtualenv/repositories/telegram-bot/3.8/bin/pip install --upgrade pip
+            /home/unklabid/virtualenv/repositories/telegram-bot/3.8/bin/pip install -r requirements.txt
+            /home/unklabid/virtualenv/repositories/telegram-bot/3.8/bin/python manage.py migrate
+            /home/unklabid/virtualenv/repositories/telegram-bot/3.8/bin/python manage.py check
+            /home/unklabid/virtualenv/repositories/telegram-bot/3.8/bin/python manage.py test
+            /home/unklabid/virtualenv/repositories/telegram-bot/3.8/bin/python manage.py collectstatic --noinput
+            touch tmp/restart.txt
