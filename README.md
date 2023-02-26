@@ -1,4 +1,4 @@
-# moegram-bot
+# telegram-bot
 
 ---
 
