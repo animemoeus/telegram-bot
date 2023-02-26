@@ -19,7 +19,8 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
+    path("", views.index, name="index"),
     path("admin/", admin.site.urls),
-    path("ping/", views.ping),
-    path("moegram-bot/", include("moegram_bot.urls")),
+    path("ping/", views.ping, name="ping"),
+    path("moegram-bot/", include("moegram_bot.urls"), name="moegram-bot"),
 ]
