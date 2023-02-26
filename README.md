@@ -11,7 +11,7 @@
 - [Telegram Bot Admin](https://telegram-bot.animemoe.us/admin)
 
 ```plaintext
-username: guest
+username: animemoeus
 password: animemoeus
 ```
 
