@@ -18,7 +18,7 @@ class TelegramUserAdmin(admin.ModelAdmin):
         "user",
         "username",
         "request_count",
-        "last_send_like_date",
+        "send_like_datetime",
         "created_at",
         "updated_at",
     )

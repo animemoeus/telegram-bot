@@ -158,11 +158,8 @@ STATIC_ROOT = "/home/unklabid/domains/telegram-bot.animemoe.us/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# .env variable
-if DEBUG:
-    MOEGRAM_BOT_TOKEN = env("MOEGRAM_BOT_TOKEN_DEBUG", default="")
-else:
-    MOEGRAM_BOT_TOKEN = env("MOEGRAM_BOT_TOKEN", default="")
+
+MOEGRAM_BOT_TOKEN = env("MOEGRAM_BOT_TOKEN", default="")
 
 # Instagram Like API
 LIKE_API_URL = env("LIKE_API_URL", default="")
