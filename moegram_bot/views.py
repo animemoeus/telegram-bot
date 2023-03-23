@@ -249,7 +249,7 @@ class TelegramWebhookV2(APIView):
                     telegram_user.send_text_message(message=f"Success 😁👍")
 
                     # don't forget to update telegram user last send like date if like successfully sent
-                    telegram_user.last_send_like_date = timezone.localtime()
+                    telegram_user.send_like_datetime = timezone.localtime()
                     telegram_user.save()
                 else:
                     telegram_user.send_text_message(
