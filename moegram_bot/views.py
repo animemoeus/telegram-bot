@@ -27,7 +27,16 @@ class TelegramWebhookV2(APIView):
             data=request.data.get("message", {}).get("from", {})
             or request.data.get("edited_message", {}).get("from", {})
         )
-        telegram_user_serializer.is_valid(raise_exception=True)
+
+        if not telegram_user_serializer.is_valid():
+            # need to return 200 ok status code, to prevent telegram webhook send the request again
+            # will check invalid message
+            print(
+                request.data.get("message", {}).get("from", {})
+                or request.data.get("edited_message", {}).get("from", {})
+            )
+            return Response({"detail": "Invalid request data."})
+
         telegram_user = get_or_create_telegram_user(telegram_user_serializer.data)
 
         if telegram_user.is_blocked:
