@@ -1,5 +1,5 @@
 asgiref==3.6.0
-certifi==2022.12.7
+certifi==2023.5.7
 charset-normalizer==3.1.0
 Django==3.2.18
 django-environ==0.10.0
