@@ -3,7 +3,6 @@ from django.conf import settings
 
 
 def send_typing_action(user_id):
-
     url = f"https://api.telegram.org/bot{settings.MOEGRAM_BOT_TOKEN}/sendChatAction"
     payload = {"chat_id": user_id, "action": "typing"}
     requests.request("POST", url, data=payload)

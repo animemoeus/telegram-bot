@@ -4,15 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('moegram_bot', '0003_instagrampost'),
+        ("moegram_bot", "0003_instagrampost"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='telegramuser',
-            old_name='last_send_like_date',
-            new_name='send_like_datetime',
+            model_name="telegramuser",
+            old_name="last_send_like_date",
+            new_name="send_like_datetime",
         ),
     ]
