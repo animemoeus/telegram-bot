@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,18 +14,53 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='TelegramUser',
+            name="TelegramUser",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('username', models.CharField(blank=True, default='', max_length=255)),
-                ('request_count', models.IntegerField(default=0)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('is_blocked', models.BooleanField(default=False)),
-                ('send_like_interval', models.IntegerField(choices=[(0, 'Unlimited'), (1, 'One Minute'), (5, 'Five Minutes'), (10, 'Ten Minutes'), (15, 'Fifteen Minutes'), (20, 'Twenty Minutes'), (25, 'Twenty Five Minutes'), (30, 'Thirty Minutes'), (35, 'Thirty Five Minutes'), (40, 'Forty Minutes'), (45, 'Forty Five Minutes'), (50, 'Fifty Minutes'), (55, 'Fifty Five Minutes'), (60, 'Sixty Minutes')], default=60)),
-                ('last_send_like_date', models.DateTimeField(blank=True, null=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("username", models.CharField(blank=True, default="", max_length=255)),
+                ("request_count", models.IntegerField(default=0)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("is_blocked", models.BooleanField(default=False)),
+                (
+                    "send_like_interval",
+                    models.IntegerField(
+                        choices=[
+                            (0, "Unlimited"),
+                            (1, "One Minute"),
+                            (5, "Five Minutes"),
+                            (10, "Ten Minutes"),
+                            (15, "Fifteen Minutes"),
+                            (20, "Twenty Minutes"),
+                            (25, "Twenty Five Minutes"),
+                            (30, "Thirty Minutes"),
+                            (35, "Thirty Five Minutes"),
+                            (40, "Forty Minutes"),
+                            (45, "Forty Five Minutes"),
+                            (50, "Fifty Minutes"),
+                            (55, "Fifty Five Minutes"),
+                            (60, "Sixty Minutes"),
+                        ],
+                        default=60,
+                    ),
+                ),
+                ("last_send_like_date", models.DateTimeField(blank=True, null=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

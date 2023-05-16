@@ -25,7 +25,6 @@ class TelegramUserAdmin(admin.ModelAdmin):
 
 
 class InstagramPostAdmin(admin.ModelAdmin):
-
     list_display = (
         "user",
         "url",
