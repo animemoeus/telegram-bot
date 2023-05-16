@@ -11,7 +11,6 @@ from .telegram import send_text_message, send_typing_action
 
 
 class TelegramUser(models.Model, TelegramUserServices):
-
     TELEGRAM_BOT_TOKEN = settings.MOEGRAM_BOT_TOKEN
 
     class Interval(models.IntegerChoices):
@@ -29,13 +28,14 @@ class TelegramUser(models.Model, TelegramUserServices):
         FIFTY_MINUTES = 50
         FIFTY_FIVE_MINUTES = 55
         SIXTY_MINUTES = 60
+        TWO_HOURS = 120
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     username = models.CharField(max_length=255, blank=True, default="")
     request_count = models.IntegerField(default=0)
     is_blocked = models.BooleanField(default=False)
 
-    send_like_interval = models.IntegerField(choices=Interval.choices, default=60)
+    send_like_interval = models.IntegerField(choices=Interval.choices, default=120)
     send_like_datetime = models.DateTimeField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -67,7 +67,6 @@ class TelegramUser(models.Model, TelegramUserServices):
 
 
 class InstagramPost(models.Model):
-
     user = models.ForeignKey("TelegramUser", on_delete=models.CASCADE)
 
     url = models.CharField(max_length=255)
