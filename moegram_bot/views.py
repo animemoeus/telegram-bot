@@ -110,6 +110,6 @@ class TelegramWebhookV2(APIView):
             telegram_user.send_text_message(
                 'Follow my IG : <a href="https://instagram.com/arter_tendean">arter_tendean</a> 😉'
             )
-            return Response({"detail": user_message})
+            return Response({"detail": "Unknown message"})
 
         return HttpResponse(".")
