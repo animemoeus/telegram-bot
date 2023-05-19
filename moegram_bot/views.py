@@ -55,6 +55,9 @@ class TelegramWebhookV2(APIView):
             telegram_user.send_text_message(
                 message=f"Type /help to start using Moegram Bot!",
             )
+            telegram_user.send_text_message(
+                message=f"<i>Note: Make sure that your Instagram account is not private.</i>",
+            )
         elif user_message.startswith("/help"):
             telegram_user.send_text_message(
                 message=f"Send your Instagram post URL here to increase your post like ❤️‍🔥",
