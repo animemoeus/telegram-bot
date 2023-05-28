@@ -109,6 +109,7 @@ else:
             "PASSWORD": env("PG_DATABASE_PASSWORD", default=""),
             "HOST": env("PG_DATABASE_HOST", default=""),
             "PORT": env("PG_PG_DATABASE_PORT", default=""),
+        },
     }
 
 
