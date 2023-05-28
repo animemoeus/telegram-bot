@@ -103,11 +103,12 @@ if DEBUG:
 else:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": env("DATABASE_NAME", default=""),
-            "USER": env("DATABASE_USER", default=""),
-            "PASSWORD": env("DATABASE_PASSWORD", default=""),
-            "HOST": env("DATABASE_HOST", default=""),
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": env("PG_DATABASE_NAME", default=""),
+            "USER": env("PG_DATABASE_USER", default=""),
+            "PASSWORD": env("PG_DATABASE_PASSWORD", default=""),
+            "HOST": env("PG_DATABASE_HOST", default=""),
+            "PORT": env("PG_PG_DATABASE_PORT", default=""),
             "OPTIONS": {"charset": "utf8mb4"},
         },
     }
