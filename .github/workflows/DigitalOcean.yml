@@ -1,0 +1,30 @@
+name: AnimeMoeUs DigitalOcean
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Deploying
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing Remote SSH Commands Using Password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+          username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
+          password: ${{ secrets.DIGITAL_OCEAN_PASSWORD }}
+          port: ${{ secrets.DIGITAL_OCEAN_PORT }}
+          script_stop: true
+          script: |
+            cd ${{ secrets.DIGITAL_OCEAN_REPOSITORY_PATH }}
+            git pull origin ${{ github.event.release.target_commitish }} --force
+            git checkout ${{ github.event.release.target_commitish }}
+            ${{ secrets.DIGITAL_OCEAN_ENV_REPOSITORY_PATH }}/pip install --upgrade pip
+            ${{ secrets.DIGITAL_OCEAN_ENV_REPOSITORY_PATH }}/pip install -r requirements.txt
+            ${{ secrets.DIGITAL_OCEAN_ENV_REPOSITORY_PATH }}/python manage.py migrate
+            ${{ secrets.DIGITAL_OCEAN_ENV_REPOSITORY_PATH }}/python manage.py check
+            ${{ secrets.DIGITAL_OCEAN_ENV_REPOSITORY_PATH }}/python manage.py test
+            ${{ secrets.DIGITAL_OCEAN_ENV_REPOSITORY_PATH }}/python manage.py collectstatic --noinput
+            sudo kill -HUP $(cat logs/telegram-bot.pid)
