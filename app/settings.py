@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "rest_framework",
     # application
     "moegram_bot",
+    "pacuan_kuda",
 ]
 
 MIDDLEWARE = [
