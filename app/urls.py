@@ -23,4 +23,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("ping/", views.ping, name="ping"),
     path("moegram-bot/", include("moegram_bot.urls"), name="moegram-bot"),
+    path("pacuan-kuda/", include("pacuan_kuda.urls"), name="pacuan-kuda"),
 ]
