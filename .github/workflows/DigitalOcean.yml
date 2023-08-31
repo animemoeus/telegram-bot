@@ -27,4 +27,4 @@ jobs:
             ${{ secrets.DIGITAL_OCEAN_ENV_REPOSITORY_PATH }}/python3 manage.py check
             ${{ secrets.DIGITAL_OCEAN_ENV_REPOSITORY_PATH }}/python3 manage.py test
             ${{ secrets.DIGITAL_OCEAN_ENV_REPOSITORY_PATH }}/python3 manage.py collectstatic --noinput
-            sudo kill -HUP $(cat logs/telegram-bot.pid)
+            sudo kill -HUP $(cat logs/telegram_bot.pid)
