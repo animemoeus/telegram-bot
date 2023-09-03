@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "rest_framework",
     # application
     "moegram_bot",
+    "twitter_video_downloader",
 ]
 
 MIDDLEWARE = [
