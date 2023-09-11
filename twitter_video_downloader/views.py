@@ -63,7 +63,7 @@ class TelegramUserWebhook(GenericAPIView):
                 send_to=telegram_user.user_id, data=tweet_data.get("data")
             )
             telegram_user.send_text_message_inline_keyboard(
-                message="💡 Ads keep us free for you.",
+                message=f"🤖 Welcome to Twitter Video Downloader Bot 🔥\n \n🌟 Keep this bot active and free by clicking on the ads.🙌 \n\nThanks for supporting 🙂!",
                 inline_text="Download video now! ⚡",
                 inline_url=f'https://telegram-bot.animemoe.us/{reverse("twitter_video_downloader:download_video", kwargs={"slug": tweet.id})}',
             )
