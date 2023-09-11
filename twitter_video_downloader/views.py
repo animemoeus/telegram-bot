@@ -78,8 +78,7 @@ def download_video(request, slug=None):
 
     if request.method == "GET":
         return render(
-            request,
-            "twitter_video_downloader/download.html",
+            request, "twitter_video_downloader/download.html", {"uuid": tweet.id}
         )
 
     if request.method == "POST":
