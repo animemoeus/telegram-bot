@@ -33,9 +33,9 @@ jobs:
       - name: "Create .env file"
         run: |
           touch .env
-          TVD_API_URL
-          echo TVD_API_KEY=${{ secrets.API_KEY }} >> .env
-          echo TVD_API_HOST=${{ secrets.API_KEY }} >> .env
+          echo TVD_API_URL=${{ secrets.TVD_API_URL }} >> .env
+          echo TVD_API_KEY=${{ secrets.TVD_API_KEY }} >> .env
+          echo TVD_API_HOST=${{ secrets.TVD_API_HOST }} >> .env
       - name: Run Check
         run: |
           python manage.py check
