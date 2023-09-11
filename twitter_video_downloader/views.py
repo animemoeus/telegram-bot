@@ -1,10 +1,14 @@
 import re
 
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
-from .models import TelegramUser
+from .models import TelegramUser, Tweet
 from .utils import ParseTelegramWebhook, get_video
 
 
@@ -55,9 +59,28 @@ class TelegramUserWebhook(GenericAPIView):
         if not tweet_data.get("success"):
             telegram_user.send_text_message(tweet_data.get("message"))
         else:
-            telegram_user.send_video(
-                tweet_data.get("data").get("user").get("name"),
-                tweet_data.get("data").get("videos"),
+            tweet = Tweet.objects.create(
+                send_to=telegram_user.user_id, data=tweet_data.get("data")
+            )
+            telegram_user.send_text_message_inline_keyboard(
+                message="💡 Ads keep us free for you.",
+                inline_text="Download video now! ⚡",
+                inline_url=f'https://telegram-bot.animemoe.us/{reverse("twitter_video_downloader:download_video", kwargs={"slug": tweet.id})}',
             )
 
         return Response(status=status.HTTP_200_OK)
+
+
+@csrf_exempt
+def download_video(request, slug=None):
+    tweet = get_object_or_404(Tweet, id=slug)
+    reverse("twitter_video_downloader:download_video", kwargs={"slug": tweet.id})
+
+    if request.method == "GET":
+        return render(
+            request, "twitter_video_downloader/download.html", {"uuid": tweet.id}
+        )
+
+    if request.method == "POST":
+        tweet.send_video_to_user()
+        return HttpResponse(".")
