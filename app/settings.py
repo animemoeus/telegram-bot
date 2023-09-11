@@ -36,7 +36,7 @@ SECRET_KEY = env(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG", default=True)
+DEBUG = bool(env("DEBUG", default=True))
 
 
 ALLOWED_HOSTS = ["telegram-bot.animemoe.us"]
@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "rest_framework",
     # application
     "moegram_bot",
+    "twitter_video_downloader",
 ]
 
 MIDDLEWARE = [
@@ -168,6 +169,13 @@ LIKE_API_SECRET = env("LIKE_API_SECRET", default="")
 
 # SECRET KEY TO BYPASS MOEGRAM BOT USER ACTIVATION
 MASTER_KEY_ACTIVATION = env("MASTER_KEY", default=None)
+
+
+# Twitter Video Downloder
+TVD_BOT_TOKEN = env("TVD_BOT_TOKEN", default=None)
+TVD_API_URL = env("TVD_API_URL", default=None)
+TVD_API_KEY = env("TVD_API_KEY", default=None)
+TVD_API_HOST = env("TVD_API_HOST", default=None)
 
 
 if not DEBUG:
