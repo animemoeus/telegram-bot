@@ -1,9 +1,12 @@
+from django.conf import settings
 from django.db import models
 
 from app.services import TelegramUserServices
 
 
 class TelegramUser(models.Model, TelegramUserServices):
+    TELEGRAM_BOT_TOKEN = settings.TVD_BOT_TOKEN
+
     user_id = models.CharField(max_length=25)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255, default="")

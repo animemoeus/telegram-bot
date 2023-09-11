@@ -172,6 +172,7 @@ MASTER_KEY_ACTIVATION = env("MASTER_KEY", default=None)
 
 
 # Twitter Video Downloder
+TVD_BOT_TOKEN = env("TVD_BOT_TOKEN", default=None)
 TVD_API_URL = env("TVD_API_URL", default=None)
 TVD_API_KEY = env("TVD_API_KEY", default=None)
 TVD_API_HOST = env("TVD_API_HOST", default=None)
