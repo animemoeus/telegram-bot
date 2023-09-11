@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TelegramUser
+from .models import TelegramUser, Tweet
 
 
 class TelegramUserAdmin(admin.ModelAdmin):
@@ -16,4 +16,9 @@ class TelegramUserAdmin(admin.ModelAdmin):
     ]
 
 
+class TweetAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(TelegramUser, TelegramUserAdmin)
+admin.site.register(Tweet, TweetAdmin)
