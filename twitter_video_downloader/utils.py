@@ -1,45 +1,64 @@
-import urllib
+import re
 
 import requests
-from bs4 import BeautifulSoup
-from django.utils.encoding import iri_to_uri, uri_to_iri
+from django.conf import settings
 
 
-def ssstwitter_com(tweet_url: str):
-    url = "https://ssstwitter.com/"
+def get_video(
+    tweet_link: str,
+):
+    url = f"{settings.TVD_API_URL}?url={tweet_link}"
 
-    payload = f"id={urllib.parse.quote_plus(tweet_url)}&locale=en&tt=60235e3409bd9bbf594d18d0ae0636ac&ts=1693738774&source=form"
     headers = {
-        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "hx-current-url": "https://ssstwitter.com/",
-        "hx-request": "true",
-        "hx-target": "target",
-        "origin": "https://ssstwitter.com",
-        "pragma": "no-cache",
-        "referer": "https://ssstwitter.com/",
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": '"Windows"',
-        "sec-fetch-dest": "empty",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-origin",
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
+        "X-RapidAPI-Key": settings.TVD_API_KEY,
+        "X-RapidAPI-Host": settings.TVD_API_HOST,
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+    response = requests.request("GET", url, headers=headers)
 
-    if not response.status_code == 200:
-        return {"status": response.status_code, "data": {}, "message": ""}
+    if response.status_code == 429:
+        return {
+            "success": False,
+            "data": None,
+            "message": "Too many requests. Try again.",
+        }
 
-    html_doc = response.text
-    soup = BeautifulSoup(html_doc, "html.parser")
-    arter = soup.find("div", {"class": "result_overlay"}).find_all("a")
+    response = response.json()
 
-    tweet_data = []
-    for i in arter[:-1]:
-        tweet_data.append({"text": " ".join(i.text.split()), "url": i.get("href")})
+    if response.get("error"):
+        return {"success": False, "data": None, "message": response.get("error")}
+
+    if response.get("errors"):
+        return {
+            "success": False,
+            "data": None,
+            "message": response.get("errors")[0].get("message"),
+        }
+
+    if not response.get("media").get("video"):
+        return {
+            "success": False,
+            "data": None,
+            "message": "No video was found on the tweet.",
+        }
+
+    videos = []
+    for video in response.get("media").get("video").get("videoVariants"):
+        if video.get("bitrate") != 0:
+            videos.append(
+                {
+                    "size": re.findall(r"[0-9]+x[0-9]+", video.get("url"))[0],
+                    "url": video.get("url"),
+                }
+            )
 
     return {
-        "status": response.status_code,
-        "data": tweet_data,
-        "message": "https://ssstwitter.com/",
+        "success": True,
+        "data": {
+            "tweet_id": response.get("id"),
+            "description": response.get("description"),
+            "videos": videos,
+            "user": response.get("user"),
+        },
+        "message": "",
     }
