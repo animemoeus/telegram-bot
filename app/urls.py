@@ -13,10 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+
 from django.contrib import admin
 from django.urls import include, path
 
 from . import views
+
+# app_name = "twitter_video_downloader"
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -25,7 +29,9 @@ urlpatterns = [
     path("moegram-bot/", include("moegram_bot.urls"), name="moegram-bot"),
     path(
         "twitter-video-downloader/",
-        include("twitter_video_downloader.urls"),
-        name="twitter-video-downloder",
+        include(
+            ("twitter_video_downloader.urls", "twitter_video_downloader"),
+            namespace="twitter_video_downloader",
+        ),
     ),
 ]

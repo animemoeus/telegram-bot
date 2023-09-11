@@ -74,18 +74,55 @@ class TelegramUserServicesV2:
 
     def send_text_message(self, message: str, message_id: int = None):
         url = f"https://api.telegram.org/bot{self.TELEGRAM_BOT_TOKEN}/sendMessage"
+        headers = {"Content-Type": "application/json"}
 
-        payload = {
-            "chat_id": self.user_id,
-            "text": message,
-            "parse_mode": "HTML",
-            "disable_web_page_preview": "True",
-            "disable_notification": "True",
-            "reply_to_message_id": message_id,
-        }
+        payload = json.dumps(
+            {
+                "chat_id": self.user_id,
+                "text": message,
+                "parse_mode": "HTML",
+                "disable_web_page_preview": "True",
+                "disable_notification": "True",
+                "reply_to_message_id": message_id,
+            }
+        )
 
         self.send_typing_action()
-        requests.request("POST", url, data=payload)
+        requests.request("POST", url, headers=headers, data=payload)
+
+    def send_text_message_inline_keyboard(
+        self,
+        message: str,
+        inline_text: str,
+        inline_url: str,
+        message_id: int = None,
+    ):
+        url = f"https://api.telegram.org/bot{self.TELEGRAM_BOT_TOKEN}/sendMessage"
+        headers = {"Content-Type": "application/json"}
+
+        payload = json.dumps(
+            {
+                "chat_id": self.user_id,
+                "text": message,
+                "parse_mode": "HTML",
+                "disable_web_page_preview": "True",
+                "disable_notification": "True",
+                "reply_to_message_id": message_id,
+                "reply_markup": {
+                    "inline_keyboard": [
+                        [
+                            {
+                                "text": inline_text,
+                                "web_app": {"url": inline_url},
+                            }
+                        ],
+                    ]
+                },
+            }
+        )
+
+        self.send_typing_action()
+        requests.request("POST", url, headers=headers, data=payload)
 
     def send_video(self, caption: str, videos: list):
         self.send_upload_video_action()
