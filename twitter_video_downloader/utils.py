@@ -1,3 +1,4 @@
+import json
 import re
 
 import requests
@@ -62,3 +63,27 @@ def get_video(
         },
         "message": "",
     }
+
+
+class ParseTelegramWebhook:
+    def __init__(self, request):
+        self.request = request
+
+    def get_data(self):
+        try:
+            data = json.loads(self.request)
+        except:
+            return False
+
+        # Reject if not first message (eg. edited or deleted message)
+        if not data.get("message"):
+            return False
+
+        # Reject if messaage is not text message
+        if not data.get("message").get("text"):
+            return False
+
+        user = data.get("message").get("from")
+        message = data.get("message").get("text") or ""
+
+        return {"user": user, "text_message": message}

@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import TelegramUser
+
+
+class TelegramUserAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(TelegramUser, TelegramUserAdmin)

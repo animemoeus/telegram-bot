@@ -23,4 +23,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("ping/", views.ping, name="ping"),
     path("moegram-bot/", include("moegram_bot.urls"), name="moegram-bot"),
+    path(
+        "twitter-video-downloader/",
+        include("twitter_video_downloader.urls"),
+        name="twitter-video-downloder",
+    ),
 ]
