@@ -15,12 +15,18 @@ class TelegramUserAdmin(admin.ModelAdmin):
         "updated_at",
     ]
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
 
 class TweetAdmin(admin.ModelAdmin):
     ordering = ["-created_at"]
 
     list_display = ["id", "created_at"]
     readonly_fields = ["created_at", "updated_at", "send_to", "data"]
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 admin.site.register(TelegramUser, TelegramUserAdmin)
