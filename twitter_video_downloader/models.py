@@ -39,6 +39,9 @@ class Tweet(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.id}"
+
     def send_video_to_user(self):
         url = f"https://api.telegram.org/bot{self.TELEGRAM_BOT_TOKEN}/sendVideo"
         payload = json.dumps(

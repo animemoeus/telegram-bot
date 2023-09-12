@@ -17,7 +17,10 @@ class TelegramUserAdmin(admin.ModelAdmin):
 
 
 class TweetAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["-created_at"]
+
+    list_display = ["id", "created_at"]
+    readonly_fields = ["created_at", "updated_at", "send_to", "data"]
 
 
 admin.site.register(TelegramUser, TelegramUserAdmin)
