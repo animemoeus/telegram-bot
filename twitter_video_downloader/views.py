@@ -9,7 +9,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
 from .models import TelegramUser, Tweet
-from .utils import ParseTelegramWebhook, get_video
+from .utils import ParseTelegramWebhook, get_sensitive_video, get_video
 
 
 class TelegramUserWebhook(GenericAPIView):
@@ -55,7 +55,12 @@ class TelegramUserWebhook(GenericAPIView):
             telegram_user.send_text_message(f"Can't find tweet id from your message.")
             return Response(status=status.HTTP_200_OK)
 
-        tweet_data = get_video(tweet_id)
+        # First we try to get the tweet fron sensitive API
+        # If failed, just try using the default API
+        tweet_data = get_sensitive_video(tweet_id)
+        if not tweet_data.get("success"):
+            tweet_data = get_video(tweet_id)
+
         if not tweet_data.get("success"):
             telegram_user.send_text_message(tweet_data.get("message"))
         else:

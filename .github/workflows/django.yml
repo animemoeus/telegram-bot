@@ -36,6 +36,7 @@ jobs:
           echo TVD_API_URL=${{ secrets.TVD_API_URL }} >> .env
           echo TVD_API_KEY=${{ secrets.TVD_API_KEY }} >> .env
           echo TVD_API_HOST=${{ secrets.TVD_API_HOST }} >> .env
+          echo TVD_API_COOKIE=${{ secrets.TVD_API_COOKIE }} >> .env
       - name: Run Check
         run: |
           python manage.py check
