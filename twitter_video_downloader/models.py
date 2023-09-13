@@ -48,9 +48,9 @@ class Tweet(models.Model):
             {
                 "chat_id": self.send_to,
                 "video": self.data.get("videos")[0]["url"],
-                "caption": self.data.get("user").get("name"),
+                "caption": "",
                 "parse_mode": "HTML",
-                "reply_to_message_id": "message_id",
+                "reply_to_message_id": "",
                 "reply_markup": {
                     "inline_keyboard": [
                         [
