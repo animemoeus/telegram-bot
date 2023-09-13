@@ -18,6 +18,7 @@ class TwitterVideoDownloader(TestCase):
         self.assertEqual(result.get("success"), True)
 
     def test_get_sensitive_video(self):
+        time.sleep(1)
         result = utils.get_sensitive_video(
             "https://x.com/maobaobao798/status/1681560860651831297?s=20"
         )
