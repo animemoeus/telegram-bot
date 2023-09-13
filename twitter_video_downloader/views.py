@@ -68,9 +68,9 @@ class TelegramUserWebhook(GenericAPIView):
                 send_to=telegram_user.user_id, data=tweet_data.get("data")
             )
             telegram_user.send_text_message_inline_keyboard(
-                message=f"🤖 Welcome to Twitter Video Downloader Bot 🔥\n \n🌟 Keep this bot active and free by clicking on the ads.🙌 \n\nThanks for supporting 🙂!",
-                inline_text="🔰 Continue Download! 🔰",
-                inline_url=f'https://telegram-bot.animemoe.us/{reverse("twitter_video_downloader:download_video", kwargs={"slug": tweet.id})}',
+                message=f"🌟 Keep this bot active and free by clicking on the ads while downloading 🙂 \n\nThanks for supporting 🫡",
+                inline_text="🔰 Continue Download!",
+                inline_url=f'https://telegram-bot.animemoe.us{reverse("twitter_video_downloader:download_video", kwargs={"slug": tweet.id})}',
             )
 
         return Response(status=status.HTTP_200_OK)
@@ -87,5 +87,16 @@ def download_video(request, slug=None):
         )
 
     if request.method == "POST":
-        tweet.send_video_to_user()
+        if not tweet.send_video_to_user():
+            telegram_user = TelegramUser.objects.get(user_id=tweet.send_to)
+
+            # get all video url and save it as html hyperlink
+            video_hyperlink = ""
+            for i in tweet.data.get('videos'):
+                video_hyperlink += f'⚡ <a href="{i["url"]}">{i["size"]}</a>\n'
+
+            # message for user
+            message = f"{video_hyperlink}\n\n"
+
+            telegram_user.send_text_message(message)
         return HttpResponse(".")
