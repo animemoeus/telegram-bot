@@ -92,7 +92,7 @@ def download_video(request, slug=None):
 
             # get all video url and save it as html hyperlink
             video_hyperlink = ""
-            for i in tweet.data.get('videos'):
+            for i in tweet.data.get("videos"):
                 video_hyperlink += f'⚡ <a href="{i["url"]}">{i["size"]}</a>\n'
 
             # message for user
