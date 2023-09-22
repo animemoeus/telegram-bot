@@ -198,7 +198,7 @@
       function updateCountdown() {
         const countdownElement = document.getElementById("countdown");
         if (count > 0) {
-          countdownElement.textContent = `Sending video in ${count} seconds...`;
+          countdownElement.textContent = `Waiting for ${count} seconds...`;
           count--;
           setTimeout(updateCountdown, 1000);
         } else {
