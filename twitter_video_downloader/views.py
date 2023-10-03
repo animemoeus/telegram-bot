@@ -56,7 +56,7 @@ class TelegramUserWebhook(GenericAPIView):
             return Response(status=status.HTTP_200_OK)
 
         telegram_user.send_text_message(
-            f"Thankyou for using this bot.\n\nUnfortunately, the revenue from ads is not enough to cover the server and cost and the Twitter API subscription."
+            f"Thankyou for using this bot.\n\nUnfortunately, the revenue from ads is not enough to cover the server cost and the Twitter API subscription."
         )
         telegram_user.send_text_message(
             f"Will activate this bot again after I have enough funds to cover this bot's costs. \n\nContact me at arter@animemoe.us if you have any questions."
