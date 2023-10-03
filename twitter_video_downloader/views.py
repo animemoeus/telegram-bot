@@ -55,6 +55,14 @@ class TelegramUserWebhook(GenericAPIView):
             telegram_user.send_text_message(f"Can't find tweet id from your message.")
             return Response(status=status.HTTP_200_OK)
 
+        telegram_user.send_text_message(
+            f"Thankyou for using this bot.\n\nUnfortunately, the revenue from ads is not enough to cover the server and cost and the Twitter API subscription."
+        )
+        telegram_user.send_text_message(
+            f"Will activate this bot again after I have enough funds to cover this bot's costs. \n\nContact me at arter@animemoe.us if you have any questions."
+        )
+        return Response(status=status.HTTP_200_OK)
+
         # First we try to get the tweet fron sensitive API
         # If failed, just try using the default API
         tweet_data = get_sensitive_video(tweet_id)
