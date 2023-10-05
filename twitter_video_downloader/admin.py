@@ -5,6 +5,7 @@ from .models import TelegramUser, Tweet
 
 class TelegramUserAdmin(admin.ModelAdmin):
     list_display = ["first_name", "last_name", "username", "request_count"]
+    search_fields = ["first_name", "last_name", "username"]
     readonly_fields = [
         "user_id",
         "first_name",
