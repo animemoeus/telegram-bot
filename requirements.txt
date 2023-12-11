@@ -10,7 +10,7 @@ djangorestframework==3.14.0
 idna==3.4
 mypy-extensions==1.0.0
 packaging==23.2
-pathspec==0.11.2
+pathspec==0.12.1
 platformdirs==4.1.0
 psycopg2-binary==2.9.9
 pytz==2023.3.post1
