@@ -1,3 +1,9 @@
+
+## This project is moved to: https://github.com/animemoeus/backend/
+
+---
+---
+
 # Telegram Bot | ![GitHub release (latest by date)](https://img.shields.io/github/v/release/animemoeus/telegram-bot?color=green) ![Uptime Robot status](https://img.shields.io/uptimerobot/status/m792813817-4078225bff158102d312f102) ![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m792813817-4078225bff158102d312f102)
 
 - [Service Status](https://stats.uptimerobot.com/GKy6liBGw7/792813817)
